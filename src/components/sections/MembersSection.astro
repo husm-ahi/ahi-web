@@ -22,7 +22,11 @@ const rendered = showBio
       {rendered.map(({ m, Content }) => (
         <div class="member">
           <div class="ph">
-            {m.data.photo && <img src={withBase(m.data.photo)} alt={`${m.data.name}の顔写真`} />}
+            {m.data.photo ? (
+              <img src={withBase(m.data.photo)} alt={`${m.data.name}の顔写真`} />
+            ) : (
+              <span class="ph-fallback" aria-hidden="true">{m.data.name.charAt(0)}</span>
+            )}
           </div>
           <div class="tx">
             <b>{m.data.name}</b>
