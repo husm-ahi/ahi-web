@@ -18,7 +18,15 @@
         r: (1.2 + ((i * 0.37) % 1) * 1.6) * devicePixelRatio,
       }));
     }
-    resize();
+    function start() {
+      resize();
+      frame();
+    }
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", start);
+    } else {
+      start();
+    }
     addEventListener("resize", resize);
     function frame() {
       t += 0.004;
@@ -53,6 +61,5 @@
       }
       requestAnimationFrame(frame);
     }
-    frame();
   })();
 </script>

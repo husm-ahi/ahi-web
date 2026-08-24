@@ -1,11 +1,12 @@
 ---
-import { getCollection, render } from "astro:content";
+import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import HeroMesh from "../components/HeroMesh.astro";
 import { withBase } from "../utils/url";
 
 const homepage = (await getCollection("homepage"))[0];
-const { Content } = await render(homepage);
+
+const about = (await getCollection("pages", (p) => p.data.slug === "about"))[0];
 
 const news = (await getCollection("news", (n) => !n.data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -19,7 +20,7 @@ const fmt = (d: Date) =>
   <div class="hero">
     <HeroMesh />
     <div class="hero-in">
-      <h1>{homepage.data.tagline ?? homepage.data.title}</h1>
+      <h1 set:html={homepage.data.tagline ?? homepage.data.title} />
       <p class="sub">{homepage.data.title}</p>
     </div>
   </div>
@@ -42,9 +43,8 @@ const fmt = (d: Date) =>
   <section class="block" style="padding-top:0">
     <div class="wrap">
       <div class="sec-head"><h2>講座について</h2></div>
-      <div class="prose" style="margin:0;padding:0;max-width:44em">
-        <Content />
-      </div>
+      <p class="sub" style="max-width:44em">{about.data.description}</p>
+      <a class="more" href={withBase(`/${about.data.slug}`)}>講座について詳しく見る →</a>
     </div>
   </section>
 </Base>

@@ -18,6 +18,9 @@ const desc =
 const navPages = (await getCollection("pages", (p) => p.data.nav)).sort(
   (a, b) => a.data.order - b.data.order
 );
+const pageBySlug = new Map(navPages.map((p) => [p.data.slug, p]));
+const research = pageBySlug.get("research");
+const access = pageBySlug.get("access");
 ---
 
 <!doctype html>
@@ -42,10 +45,13 @@ const navPages = (await getCollection("pages", (p) => p.data.nav)).sort(
         <nav aria-label="メイン">
           <ul>
             <li><a class="nav-link" href={withBase("/news")}>ニュース</a></li>
+            {research && (
+              <li><a class="nav-link" href={withBase(`/${research.data.slug}`)}>{research.data.title}</a></li>
+            )}
             <li><a class="nav-link" href={withBase("/members")}>メンバー</a></li>
-            {navPages.map((p) => (
-              <li><a class="nav-link" href={withBase(`/${p.data.slug}`)}>{p.data.title}</a></li>
-            ))}
+            {access && (
+              <li><a class="nav-link" href={withBase(`/${access.data.slug}`)}>{access.data.title}</a></li>
+            )}
           </ul>
         </nav>
       </div>
