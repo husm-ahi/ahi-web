@@ -1,0 +1,145 @@
+<title>案C 深層</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Murecho:wght@300;400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#0a1220;
+    --bg-2:#0e1a2c;
+    --ink:#e8eef6;
+    --ink-soft:#8fa0b4;
+    --line:rgba(146,170,196,.16);
+    --teal:#3fd6c5;
+    --blue:#3b82f6;
+    --display:"Murecho",sans-serif;
+    --body:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.95;font-feature-settings:"palt"}
+  a{color:inherit;text-decoration:none}
+  a:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 28px}
+
+  /* slow aurora ground */
+  .aurora{position:fixed;inset:0;z-index:-1;overflow:hidden;background:
+    radial-gradient(1200px 700px at 75% -10%, #12233c 0%, transparent 60%),var(--bg)}
+  .aurora i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5}
+  .aurora i:nth-child(1){width:52vw;height:52vw;left:-12vw;top:-14vw;background:#123a4e;animation:drift1 26s ease-in-out infinite alternate}
+  .aurora i:nth-child(2){width:44vw;height:44vw;right:-10vw;top:16vh;background:#12294d;animation:drift2 32s ease-in-out infinite alternate}
+  .aurora i:nth-child(3){width:30vw;height:30vw;left:32vw;top:52vh;background:#0e3b39;animation:drift1 38s ease-in-out infinite alternate-reverse}
+  @keyframes drift1{from{transform:translate(0,0) scale(1)}to{transform:translate(6vw,5vh) scale(1.12)}}
+  @keyframes drift2{from{transform:translate(0,0) scale(1.08)}to{transform:translate(-5vw,7vh) scale(.96)}}
+  @media(prefers-reduced-motion:reduce){.aurora i{animation:none}}
+
+  header{position:sticky;top:0;z-index:20;background:rgba(10,18,32,.75);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:17px 28px;max-width:1100px;margin:0 auto}
+  .brand{font-family:var(--display);font-weight:500;font-size:15.5px;letter-spacing:.05em}
+  .brand small{display:block;font-size:9.5px;letter-spacing:.22em;color:var(--ink-soft);font-weight:300}
+  nav ul{display:flex;gap:28px;list-style:none}
+  nav a{font-size:12.5px;color:var(--ink-soft);letter-spacing:.1em}
+  nav a:hover{color:var(--teal)}
+
+  .hero{max-width:1100px;margin:0 auto;padding:150px 28px 130px}
+  .kicker{font-size:11px;letter-spacing:.3em;color:var(--teal);margin-bottom:30px}
+  .hero h1{font-family:var(--display);font-weight:300;font-size:clamp(34px,5.4vw,60px);line-height:1.5;letter-spacing:.04em;text-wrap:balance}
+  .hero h1 b{font-weight:500;background:linear-gradient(90deg,var(--teal),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero .sub{margin-top:34px;max-width:36em;color:var(--ink-soft);font-size:14.5px}
+  .hero .links{margin-top:46px;display:flex;gap:26px;flex-wrap:wrap}
+  .btn{font-size:12.5px;letter-spacing:.16em;padding:13px 28px;border:1px solid var(--line);border-radius:999px;transition:border-color .25s,color .25s}
+  .btn:hover{border-color:var(--teal);color:var(--teal)}
+  .btn.primary{border-color:var(--teal);color:#062220;background:var(--teal)}
+  .btn.primary:hover{color:#062220;filter:brightness(1.08)}
+
+  section{padding:88px 0;border-top:1px solid var(--line)}
+  .sec-head{display:flex;align-items:baseline;gap:20px;margin-bottom:46px}
+  .sec-head h2{font-family:var(--display);font-weight:400;font-size:24px;letter-spacing:.1em}
+  .sec-head span{font-size:10px;letter-spacing:.3em;color:var(--teal)}
+
+  .news li{list-style:none;display:grid;grid-template-columns:120px 1fr;gap:24px;align-items:baseline;
+    padding:19px 4px;border-bottom:1px solid var(--line)}
+  .news time{font-size:12px;color:var(--ink-soft);letter-spacing:.08em;font-variant-numeric:tabular-nums}
+  .news a{color:var(--ink)}
+  .news a:hover{color:var(--teal)}
+
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .card{border:1px solid var(--line);border-radius:10px;padding:32px 26px 36px;
+    background:linear-gradient(170deg,rgba(146,170,196,.06),rgba(146,170,196,.015));
+    transition:border-color .3s}
+  .card:hover{border-color:rgba(63,214,197,.5)}
+  .card .dot{width:8px;height:8px;border-radius:50%;background:linear-gradient(90deg,var(--teal),var(--blue));margin-bottom:20px}
+  .card h3{font-family:var(--display);font-weight:500;font-size:16.5px;letter-spacing:.05em;margin-bottom:10px}
+  .card p{font-size:13px;color:var(--ink-soft)}
+
+  .members{display:flex;gap:34px;flex-wrap:wrap}
+  .member{width:170px}
+  .member .ph{width:170px;height:200px;border-radius:8px;background:linear-gradient(160deg,#152337,#0f1b2d);border:1px solid var(--line);margin-bottom:13px}
+  .member b{font-family:var(--display);font-weight:500;font-size:15.5px;letter-spacing:.06em}
+  .member span{display:block;font-size:11px;color:var(--ink-soft);letter-spacing:.14em;margin-top:2px}
+
+  footer{border-top:1px solid var(--line);padding:56px 28px;font-size:12px;color:var(--ink-soft)}
+  footer .f-in{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px}
+
+  @media(max-width:760px){
+    nav ul{display:none}
+    .cards{grid-template-columns:1fr}
+    .hero{padding:100px 28px 90px}
+    .news li{grid-template-columns:1fr;gap:2px}
+  }
+</style>
+
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="#">先端医療情報学講座<small>ADVANCED MEDICAL INFORMATICS</small></a>
+    <nav><ul>
+      <li><a href="#news">ニュース</a></li>
+      <li><a href="#research">研究</a></li>
+      <li><a href="#members">メンバー</a></li>
+      <li><a href="#">業績</a></li>
+      <li><a href="#">アクセス</a></li>
+    </ul></nav>
+  </div>
+</header>
+
+<div class="hero">
+  <p class="kicker">HAMAMATSU UNIVERSITY SCHOOL OF MEDICINE</p>
+  <h1>情報の深層から、<br><b>医療の未来</b>を設計する。</h1>
+  <p class="sub">先端医療情報学講座は、医用画像・臨床データ・医療情報基盤を対象に、情報学の方法で医療の質と安全を高める研究と教育を行っています。</p>
+  <div class="links">
+    <a class="btn primary" href="#research">研究内容を見る</a>
+    <a class="btn" href="#">大学院進学を検討中の方へ</a>
+  </div>
+</div>
+
+<section id="news"><div class="wrap">
+  <div class="sec-head"><h2>ニュース</h2><span>NEWS</span></div>
+  <ul class="news">
+    <li><time>2026.08.20</time><a href="#">講座ウェブサイトを公開しました</a></li>
+    <li><time>2026.07.31</time><a href="#">医用画像AIに関する共同研究成果が国際誌に掲載されました</a></li>
+    <li><time>2026.07.02</time><a href="#">大学院進学希望者向けの研究室見学会を開催します</a></li>
+  </ul>
+</div></section>
+
+<section id="research"><div class="wrap">
+  <div class="sec-head"><h2>研究分野</h2><span>RESEARCH</span></div>
+  <div class="cards">
+    <div class="card"><div class="dot"></div><h3>医用画像解析とAI</h3><p>CT・MRIなどの医用画像に対する深層学習の応用と、診断支援システムの臨床実装。</p></div>
+    <div class="card"><div class="dot"></div><h3>臨床データベース研究</h3><p>電子カルテ・レセプト等の実臨床データの解析による、診療の実態と質の可視化。</p></div>
+    <div class="card"><div class="dot"></div><h3>医療情報基盤</h3><p>安全で相互運用可能な医療情報システムの設計と、標準規格に基づくデータ利活用。</p></div>
+  </div>
+</div></section>
+
+<section id="members"><div class="wrap">
+  <div class="sec-head"><h2>メンバー</h2><span>MEMBERS</span></div>
+  <div class="members">
+    <div class="member"><div class="ph"></div><b>山田 太郎</b><span>特任教授</span></div>
+    <div class="member"><div class="ph"></div><b>鈴木 花子</b><span>助教</span></div>
+    <div class="member"><div class="ph"></div><b>佐藤 次郎</b><span>大学院生</span></div>
+  </div>
+</div></section>
+
+<footer><div class="f-in">
+  <div>浜松医科大学 先端医療情報学講座<br>〒431-3192 静岡県浜松市中央区半田山1丁目20-1</div>
+  <div>© Department of Advanced Medical Informatics,<br>Hamamatsu University School of Medicine</div>
+</div></footer>

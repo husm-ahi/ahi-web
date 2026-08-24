@@ -1,30 +1,161 @@
+# 先端医療情報学講座サイト — Pages CMS 設定
+# リポジトリルートに配置する
+
 media:
-  input: public
-  output: /
+  input: public/media
+  output: /media
+
 content:
-  - name: posts
-    label: Posts
+  # ─── ニュース・お知らせ(非エンジニアの主更新対象)───
+  - name: news
+    label: ニュース
     type: collection
-    path: src/content/blog
+    path: src/content/news
+    filename: "{year}-{month}-{day}-{fields.slug}.md"
     view:
-      fields: [ title, draft, date ]
+      fields: [title, date, draft]
+      primary: title
+      sort: [date]
+      default:
+        sort: date
+        order: desc
     fields:
-      - { name: author, label: Author, type: string }
-      - { name: pubDatetime, label: Date, type: date }
-      - { name: modDatetime, label: Date, type: date }
-      - { name: title, label: Title, type: string, required: true }
-      - { name: ogImage, label: Title, type: string }
-      - { name: slug, label: Slug, type: string }
-      - { name: featured, label: Featured, type: boolean }
-      - { name: draft, label: Draft, type: boolean }
-      - { name: tags, label: Tags, type: string, list: true }
-      - { name: description, label: Description, type: string }
-      - { name: body, label: Body, type: rich-text }
-  - name: about
-    label: About page
+      - name: title
+        label: タイトル
+        type: string
+        required: true
+      - name: slug
+        label: スラッグ(URL用・半角英数とハイフン)
+        type: string
+        required: true
+        pattern:
+          regex: "^[a-z0-9-]+$"
+          message: 半角小文字英数字とハイフンのみ使用できます
+      - name: date
+        label: 日付
+        type: date
+        required: true
+      - name: draft
+        label: 下書き
+        type: boolean
+        default: false
+      - name: image
+        label: アイキャッチ画像(任意)
+        type: image
+      - name: body
+        label: 本文
+        type: rich-text
+
+  # ─── メンバー紹介 ───
+  - name: members
+    label: メンバー
+    type: collection
+    path: src/content/members
+    filename: "{fields.slug}.md"
+    view:
+      fields: [name, role, order]
+      primary: name
+      sort: [order]
+      default:
+        sort: order
+        order: asc
+    fields:
+      - name: name
+        label: 氏名
+        type: string
+        required: true
+      - name: slug
+        label: スラッグ(URL用・半角英数)
+        type: string
+        required: true
+        pattern:
+          regex: "^[a-z0-9-]+$"
+          message: 半角小文字英数字とハイフンのみ使用できます
+      - name: role
+        label: 職位
+        type: select
+        options:
+          values:
+            - 教授
+            - 特任教授
+            - 准教授
+            - 講師
+            - 助教
+            - 特任研究員
+            - 大学院生
+            - 研究協力者
+      - name: order
+        label: 表示順(小さいほど上)
+        type: number
+        default: 100
+      - name: photo
+        label: 顔写真(任意)
+        type: image
+      - name: researchmap
+        label: researchmap URL(任意)
+        type: string
+      - name: body
+        label: 紹介文
+        type: rich-text
+
+  # ─── 固定ページ(CMSから新規作成可能)───
+  - name: pages
+    label: 固定ページ
+    type: collection
+    path: src/content/pages
+    filename: "{fields.slug}.md"
+    view:
+      fields: [title, nav, order]
+      primary: title
+      sort: [order]
+      default:
+        sort: order
+        order: asc
+    fields:
+      - name: title
+        label: ページタイトル
+        type: string
+        required: true
+      - name: slug
+        label: スラッグ(URL用・半角英数)
+        type: string
+        required: true
+        pattern:
+          regex: "^[a-z0-9-]+$"
+          message: 半角小文字英数字とハイフンのみ使用できます
+      - name: description
+        label: 説明文(検索結果等に表示・任意)
+        type: string
+        options:
+          maxlength: 160
+      - name: nav
+        label: メニューに表示する
+        type: boolean
+        default: true
+      - name: order
+        label: メニュー内の表示順(小さいほど左)
+        type: number
+        default: 100
+      - name: body
+        label: 本文
+        type: rich-text
+
+  # ─── トップページ(単一ファイル)───
+  - name: homepage
+    label: トップページ
     type: file
-    path: src/pages/about.md
+    path: src/content/homepage.md
     fields:
-      - { name: layout, type: string, hidden: true, default: "../layouts/AboutLayout.astro" }
-      - { name: title, label: Title, type: string }
-      - { name: body, label: Body, type: rich-text, options: { input: public/assets, output: /assets } }
+      - name: title
+        label: 講座名
+        type: string
+        required: true
+      - name: tagline
+        label: キャッチコピー
+        type: string
+      - name: hero
+        label: メインビジュアル
+        type: image
+      - name: body
+        label: 紹介文
+        type: rich-text

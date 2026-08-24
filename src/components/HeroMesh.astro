@@ -1,0 +1,58 @@
+<canvas id="hero-mesh" aria-hidden="true"></canvas>
+
+<script is:inline>
+  (function () {
+    const c = document.getElementById("hero-mesh");
+    if (!c || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const ctx = c.getContext("2d");
+    let w, h, pts = [], t = 0;
+    function resize() {
+      w = c.width = c.offsetWidth * devicePixelRatio;
+      h = c.height = c.offsetHeight * devicePixelRatio;
+      const n = Math.round(c.offsetWidth / 26);
+      pts = Array.from({ length: n }, (_, i) => ({
+        x: ((i + 0.5) / n) * w + Math.sin(i * 7.3) * 0.02 * w,
+        y: (0.15 + ((i * 0.618) % 1) * 0.7) * h,
+        vx: (Math.sin(i * 3.1) * 0.08 + 0.05) * devicePixelRatio,
+        vy: Math.cos(i * 5.7) * 0.06 * devicePixelRatio,
+        r: (1.2 + ((i * 0.37) % 1) * 1.6) * devicePixelRatio,
+      }));
+    }
+    resize();
+    addEventListener("resize", resize);
+    function frame() {
+      t += 0.004;
+      ctx.clearRect(0, 0, w, h);
+      for (const p of pts) {
+        p.x += p.vx;
+        p.y += p.vy + Math.sin(t * 2 + p.x * 0.001) * 0.05;
+        if (p.x > w + 20) p.x = -20;
+        if (p.x < -20) p.x = w + 20;
+        if (p.y > h + 20) p.y = -20;
+        if (p.y < -20) p.y = h + 20;
+      }
+      for (let i = 0; i < pts.length; i++)
+        for (let j = i + 1; j < pts.length; j++) {
+          const a = pts[i], b = pts[j];
+          const d = Math.hypot(a.x - b.x, a.y - b.y);
+          const max = 120 * devicePixelRatio;
+          if (d < max) {
+            ctx.strokeStyle = "rgba(14,111,255," + (0.09 * (1 - d / max)).toFixed(3) + ")";
+            ctx.lineWidth = devicePixelRatio * 0.7;
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        }
+      for (const p of pts) {
+        ctx.fillStyle = "rgba(14,111,255,0.34)";
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, 7);
+        ctx.fill();
+      }
+      requestAnimationFrame(frame);
+    }
+    frame();
+  })();
+</script>

@@ -1,0 +1,37 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { withBase } from "../../utils/url";
+
+const members = (await getCollection("members")).sort(
+  (a, b) => a.data.order - b.data.order
+);
+const rendered = await Promise.all(
+  members.map(async (m) => ({ m, Content: (await render(m)).Content }))
+);
+---
+
+<Base title="メンバー" description="浜松医科大学 先端医療情報学講座のメンバー紹介">
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head"><h2>メンバー</h2></div>
+      <div class="members">
+        {rendered.map(({ m, Content }) => (
+          <div class="member">
+            <div class="ph">
+              {m.data.photo && <img src={withBase(m.data.photo)} alt={`${m.data.name}の顔写真`} />}
+            </div>
+            <div class="tx">
+              <b>{m.data.name}</b>
+              {m.data.role && <span class="role">{m.data.role}</span>}
+              <div class="bio"><Content /></div>
+              {m.data.researchmap && (
+                <a class="rm" href={m.data.researchmap} target="_blank" rel="noopener">researchmap →</a>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

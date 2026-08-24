@@ -1,0 +1,29 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { withBase } from "../../utils/url";
+
+export async function getStaticPaths() {
+  const news = await getCollection("news", (n) => !n.data.draft);
+  return news.map((entry) => ({ params: { slug: entry.data.slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data.date;
+const fmt = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+---
+
+<Base title={entry.data.title}>
+  <article>
+    <div class="article-head">
+      <time datetime={d.toISOString()}>{fmt}</time>
+      <h1>{entry.data.title}</h1>
+    </div>
+    <div class="prose">
+      {entry.data.image && <p><img src={withBase(entry.data.image)} alt="" /></p>}
+      <Content />
+      <p style="margin-top:3em"><a class="more" href={withBase("/news")}>← ニュース一覧へ</a></p>
+    </div>
+  </article>
+</Base>

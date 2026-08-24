@@ -1,0 +1,190 @@
+<title>案B シグナル</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#f6f8fa;
+    --surface:#ffffff;
+    --ink:#14212e;
+    --ink-soft:#5d6b7a;
+    --line:#e2e8ee;
+    --accent:#0e6fff;
+    --accent-deep:#0a4dbb;
+    --sans:"IBM Plex Sans JP","Hiragino Kaku Gothic ProN",sans-serif;
+    --mono:"IBM Plex Mono",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.9;font-feature-settings:"palt"}
+  a{color:inherit;text-decoration:none}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+
+  header{position:sticky;top:0;z-index:20;background:rgba(246,248,250,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;max-width:1120px;margin:0 auto}
+  .brand{font-weight:700;font-size:15.5px;letter-spacing:.03em;display:flex;align-items:center;gap:11px}
+  .brand .mark{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(14,111,255,.15)}
+  nav ul{display:flex;gap:26px;list-style:none}
+  nav a{font-size:13px;color:var(--ink-soft);letter-spacing:.05em}
+  nav a:hover{color:var(--accent)}
+
+  /* hero with animated canvas */
+  .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  #mesh{position:absolute;inset:0;width:100%;height:100%}
+  .hero-in{position:relative;max-width:1120px;margin:0 auto;padding:130px 28px 120px}
+  .kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:.22em;color:var(--accent-deep);margin-bottom:22px}
+  .hero h1{font-size:clamp(30px,4.6vw,50px);font-weight:700;line-height:1.55;letter-spacing:.02em;text-wrap:balance;margin-bottom:24px}
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .hero .sub{max-width:36em;color:var(--ink-soft);font-size:15px;margin-bottom:38px}
+  .cta{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:#fff;font-size:13.5px;
+    letter-spacing:.08em;padding:13px 26px;border-radius:3px;transition:background .2s}
+  .cta:hover{background:var(--accent-deep)}
+  .hero .dept-en{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ink-soft);margin-top:56px}
+
+  section{padding:84px 0}
+  .sec-head{margin-bottom:40px}
+  .sec-head .en{font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--accent-deep)}
+  .sec-head h2{font-size:26px;font-weight:700;letter-spacing:.04em;margin-top:6px}
+
+  /* news */
+  .news{border-top:1px solid var(--line)}
+  .news li{list-style:none;display:grid;grid-template-columns:130px 1fr auto;gap:22px;align-items:baseline;
+    padding:20px 6px;border-bottom:1px solid var(--line)}
+  .news time{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft)}
+  .news .arr{color:var(--accent);font-family:var(--mono);opacity:0;transition:opacity .2s}
+  .news li:hover .arr{opacity:1}
+  .news a:hover{color:var(--accent-deep)}
+
+  /* research cards */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:30px 26px 34px;
+    transition:transform .25s,box-shadow .25s}
+  .card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(20,33,46,.08)}
+  .card .idx{font-family:var(--mono);font-size:11px;color:var(--accent);letter-spacing:.18em;margin-bottom:16px}
+  .card h3{font-size:17px;font-weight:600;margin-bottom:10px;letter-spacing:.03em}
+  .card p{font-size:13.5px;color:var(--ink-soft)}
+
+  /* members strip */
+  .members{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:22px}
+  .member{background:var(--surface);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+  .member .ph{height:170px;background:linear-gradient(150deg,#e8eef4,#d6e2ef)}
+  .member div.tx{padding:14px 16px 18px}
+  .member b{font-size:15px;font-weight:600}
+  .member span{display:block;font-size:11.5px;color:var(--ink-soft);font-family:var(--mono);margin-top:3px}
+
+  footer{border-top:1px solid var(--line);padding:52px 28px;font-size:12.5px;color:var(--ink-soft);background:var(--surface)}
+  footer .f-in{max-width:1120px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px}
+
+  @media(max-width:760px){
+    nav ul{display:none}
+    .cards{grid-template-columns:1fr}
+    .news li{grid-template-columns:1fr;gap:4px}
+    .hero-in{padding:90px 28px 80px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    #mesh{display:none}
+    .card,.cta{transition:none}
+  }
+</style>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="#"><span class="mark"></span>先端医療情報学講座</a>
+    <nav><ul>
+      <li><a href="#news">ニュース</a></li>
+      <li><a href="#research">研究</a></li>
+      <li><a href="#members">メンバー</a></li>
+      <li><a href="#">業績</a></li>
+      <li><a href="#">アクセス</a></li>
+    </ul></nav>
+  </div>
+</header>
+
+<div class="hero">
+  <canvas id="mesh" aria-hidden="true"></canvas>
+  <div class="hero-in">
+    <p class="kicker">HAMAMATSU UNIVERSITY SCHOOL OF MEDICINE</p>
+    <h1>医療データの<em>シグナル</em>を、<br>次の医療のかたちに。</h1>
+    <p class="sub">先端医療情報学講座は、医用画像・臨床データ・医療情報基盤を対象に、情報学の方法で医療の質と安全を高める研究と教育を行っています。</p>
+    <a class="cta" href="#research">研究内容を見る →</a>
+    <p class="dept-en">DEPT. OF ADVANCED MEDICAL INFORMATICS</p>
+  </div>
+</div>
+
+<section id="news"><div class="wrap">
+  <div class="sec-head"><span class="en">NEWS</span><h2>ニュース</h2></div>
+  <ul class="news">
+    <li><time>2026-08-20</time><a href="#">講座ウェブサイトを公開しました</a><span class="arr">→</span></li>
+    <li><time>2026-07-31</time><a href="#">医用画像AIに関する共同研究成果が国際誌に掲載されました</a><span class="arr">→</span></li>
+    <li><time>2026-07-02</time><a href="#">大学院進学希望者向けの研究室見学会を開催します</a><span class="arr">→</span></li>
+  </ul>
+</div></section>
+
+<section id="research"><div class="wrap">
+  <div class="sec-head"><span class="en">RESEARCH</span><h2>研究分野</h2></div>
+  <div class="cards">
+    <div class="card"><p class="idx">IMAGING</p><h3>医用画像解析とAI</h3><p>CT・MRIなどの医用画像に対する深層学習の応用と、診断支援システムの臨床実装。</p></div>
+    <div class="card"><p class="idx">CLINICAL DATA</p><h3>臨床データベース研究</h3><p>電子カルテ・レセプト等の実臨床データの解析による、診療の実態と質の可視化。</p></div>
+    <div class="card"><p class="idx">INFRASTRUCTURE</p><h3>医療情報基盤</h3><p>安全で相互運用可能な医療情報システムの設計と、標準規格に基づくデータ利活用。</p></div>
+  </div>
+</div></section>
+
+<section id="members"><div class="wrap">
+  <div class="sec-head"><span class="en">MEMBERS</span><h2>メンバー</h2></div>
+  <div class="members">
+    <div class="member"><div class="ph"></div><div class="tx"><b>山田 太郎</b><span>PROFESSOR</span></div></div>
+    <div class="member"><div class="ph"></div><div class="tx"><b>鈴木 花子</b><span>ASSISTANT PROF.</span></div></div>
+    <div class="member"><div class="ph"></div><div class="tx"><b>佐藤 次郎</b><span>PHD STUDENT</span></div></div>
+  </div>
+</div></section>
+
+<footer><div class="f-in">
+  <div>浜松医科大学 先端医療情報学講座<br>〒431-3192 静岡県浜松市中央区半田山1丁目20-1</div>
+  <div>© Department of Advanced Medical Informatics,<br>Hamamatsu University School of Medicine</div>
+</div></footer>
+
+<script>
+(function(){
+  const c=document.getElementById('mesh');
+  if(!c||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const ctx=c.getContext('2d');
+  let w,h,pts=[],t=0;
+  function resize(){
+    w=c.width=c.offsetWidth*devicePixelRatio;
+    h=c.height=c.offsetHeight*devicePixelRatio;
+    const n=Math.round(c.offsetWidth/26);
+    pts=Array.from({length:n},(_,i)=>({
+      x:(i+0.5)/n*w + (Math.sin(i*7.3)*0.02*w),
+      y:(0.15+((i*0.618)%1)*0.7)*h,
+      vx:(Math.sin(i*3.1)*0.08+0.05)*devicePixelRatio,
+      vy:(Math.cos(i*5.7)*0.06)*devicePixelRatio,
+      r:(1.2+((i*0.37)%1)*1.6)*devicePixelRatio
+    }));
+  }
+  resize();addEventListener('resize',resize);
+  function frame(){
+    t+=0.004;
+    ctx.clearRect(0,0,w,h);
+    // drifting node mesh
+    for(const p of pts){
+      p.x+=p.vx;p.y+=p.vy+Math.sin(t*2+p.x*0.001)*0.05;
+      if(p.x>w+20)p.x=-20; if(p.x<-20)p.x=w+20;
+      if(p.y>h+20)p.y=-20; if(p.y<-20)p.y=h+20;
+    }
+    for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+      const a=pts[i],b=pts[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy),max=120*devicePixelRatio;
+      if(d<max){
+        ctx.strokeStyle='rgba(14,111,255,'+(0.09*(1-d/max)).toFixed(3)+')';
+        ctx.lineWidth=devicePixelRatio*0.7;
+        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+      }
+    }
+    for(const p of pts){
+      ctx.fillStyle='rgba(14,111,255,0.34)';
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill();
+    }
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>

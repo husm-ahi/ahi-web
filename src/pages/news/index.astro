@@ -1,0 +1,28 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { withBase } from "../../utils/url";
+
+const news = (await getCollection("news", (n) => !n.data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const fmt = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+---
+
+<Base title="ニュース" description="浜松医科大学 先端医療情報学講座からのお知らせ一覧">
+  <section class="block">
+    <div class="wrap">
+      <div class="sec-head"><h2>ニュース</h2></div>
+      <ul class="news">
+        {news.map((n) => (
+          <li>
+            <time datetime={n.data.date.toISOString()}>{fmt(n.data.date)}</time>
+            <a href={withBase(`/news/${n.data.slug}`)}>{n.data.title}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Base>
