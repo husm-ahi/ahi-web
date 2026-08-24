@@ -33,3 +33,28 @@ pnpm-debug.log*
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
+
+# 個人的な参照資料・壁打ちメモ
+references/
+
+# OS-specific files
+Thumbs.db
+._*
+
+# editor / IDE
+.vscode/
+.idea/
+*.swp
+
+# tool caches
+.eslintcache
+.cache/
+node_modules/.vite/
+
+# local env
+.env.*
+!.env.example
+
+# deploy platform
+.vercel/
+.netlify/
