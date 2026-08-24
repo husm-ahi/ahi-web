@@ -154,6 +154,10 @@ content:
           values:
             - { value: teaser, label: "説明文のみ(続きは個別ページへのリンク)" }
             - { value: full, label: "本文を全文表示" }
+      - name: standalone
+        label: 個別ページ(/スラッグ)も作成する
+        type: boolean
+        default: true
       - name: body
         label: 本文
         type: rich-text

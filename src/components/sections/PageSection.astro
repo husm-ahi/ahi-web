@@ -20,7 +20,9 @@ const { Content } = await render(entry);
     ) : (
       <>
         {entry.data.description && <p class="sub" style="max-width:44em">{entry.data.description}</p>}
-        <a class="more" href={withBase(`/${entry.data.slug}`)}>{entry.data.title}を詳しく見る →</a>
+        {entry.data.standalone && (
+          <a class="more" href={withBase(`/${entry.data.slug}`)}>{entry.data.title}を詳しく見る →</a>
+        )}
       </>
     )}
   </div>

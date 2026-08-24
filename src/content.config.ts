@@ -35,6 +35,7 @@ const pages = defineCollection({
     home: z.boolean().default(false),
     homeOrder: z.number().default(100),
     homeMode: z.enum(["teaser", "full"]).default("teaser"),
+    standalone: z.boolean().default(true),
   }),
 });
 
