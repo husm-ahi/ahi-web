@@ -2,18 +2,33 @@
 import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import HeroMesh from "../components/HeroMesh.astro";
+import NewsSection from "../components/sections/NewsSection.astro";
+import MembersSection from "../components/sections/MembersSection.astro";
+import PageSection from "../components/sections/PageSection.astro";
 import { withBase } from "../utils/url";
 
 const homepage = (await getCollection("homepage"))[0];
-
-const about = (await getCollection("pages", (p) => p.data.slug === "about"))[0];
 
 const news = (await getCollection("news", (n) => !n.data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 5);
 
-const fmt = (d: Date) =>
-  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+const members = (await getCollection("members")).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+const homePages = await getCollection("pages", (p) => p.data.home);
+
+type Section =
+  | { kind: "news"; order: number }
+  | { kind: "members"; order: number }
+  | { kind: "page"; order: number; entry: (typeof homePages)[number] };
+
+const sections: Section[] = [
+  { kind: "news", order: 10 },
+  { kind: "members", order: 50 },
+  ...homePages.map((entry) => ({ kind: "page" as const, order: entry.data.homeOrder, entry })),
+].sort((a, b) => a.order - b.order);
 ---
 
 <Base>
@@ -25,26 +40,13 @@ const fmt = (d: Date) =>
     </div>
   </div>
 
-  <section class="block">
-    <div class="wrap">
-      <div class="sec-head"><h2>ニュース</h2></div>
-      <ul class="news">
-        {news.map((n) => (
-          <li>
-            <time datetime={n.data.date.toISOString()}>{fmt(n.data.date)}</time>
-            <a href={withBase(`/news/${n.data.slug}`)}>{n.data.title}</a>
-          </li>
-        ))}
-      </ul>
-      <a class="more" href={withBase("/news")}>すべてのニュース →</a>
-    </div>
-  </section>
-
-  <section class="block" style="padding-top:0">
-    <div class="wrap">
-      <div class="sec-head"><h2>講座について</h2></div>
-      <p class="sub" style="max-width:44em">{about.data.description}</p>
-      <a class="more" href={withBase(`/${about.data.slug}`)}>講座について詳しく見る →</a>
-    </div>
-  </section>
+  {sections.map((s) =>
+    s.kind === "news" ? (
+      <NewsSection items={news} moreHref={withBase("/news")} />
+    ) : s.kind === "members" ? (
+      <MembersSection members={members} showBio={false} moreHref={withBase("/members")} />
+    ) : (
+      <PageSection entry={s.entry} />
+    )
+  )}
 </Base>

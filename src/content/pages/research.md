@@ -4,6 +4,9 @@ slug: research
 description: 電子カルテ情報共有・生成AI活用・クラウド基盤整備など、静岡県の支援を受けて取り組んでいるプロジェクトの紹介
 nav: true
 order: 10
+home: true
+homeOrder: 30
+homeMode: teaser
 ---
 
 ## 電子カルテ情報共有サービスモデル事業

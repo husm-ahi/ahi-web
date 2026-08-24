@@ -1,0 +1,40 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+import { withBase } from "../../utils/url";
+
+interface Props {
+  members: CollectionEntry<"members">[];
+  showBio?: boolean;
+  moreHref?: string;
+}
+
+const { members, showBio = true, moreHref } = Astro.props;
+
+const rendered = showBio
+  ? await Promise.all(members.map(async (m) => ({ m, Content: (await render(m)).Content })))
+  : members.map((m) => ({ m, Content: null }));
+---
+
+<section class="block" id="members">
+  <div class="wrap">
+    <div class="sec-head"><h2>メンバー</h2></div>
+    <div class="members">
+      {rendered.map(({ m, Content }) => (
+        <div class="member">
+          <div class="ph">
+            {m.data.photo && <img src={withBase(m.data.photo)} alt={`${m.data.name}の顔写真`} />}
+          </div>
+          <div class="tx">
+            <b>{m.data.name}</b>
+            {m.data.role && <span class="role">{m.data.role}</span>}
+            {Content && <div class="bio"><Content /></div>}
+            {m.data.researchmap && (
+              <a class="rm" href={m.data.researchmap} target="_blank" rel="noopener">researchmap →</a>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+    {moreHref && <a class="more" href={moreHref}>すべてのメンバー →</a>}
+  </div>
+</section>

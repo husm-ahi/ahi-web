@@ -105,7 +105,7 @@ content:
     path: src/content/pages
     filename: "{fields.slug}.md"
     view:
-      fields: [title, nav, order]
+      fields: [title, nav, home, order]
       primary: title
       sort: [order]
       default:
@@ -136,6 +136,22 @@ content:
         label: メニュー内の表示順(小さいほど左)
         type: number
         default: 100
+      - name: home
+        label: トップページに掲載する
+        type: boolean
+        default: false
+      - name: homeOrder
+        label: トップページでの表示順(小さいほど上)
+        type: number
+        default: 100
+      - name: homeMode
+        label: トップページでの表示方法
+        type: select
+        default: teaser
+        options:
+          values:
+            - { value: teaser, label: "説明文のみ(続きは個別ページへのリンク)" }
+            - { value: full, label: "本文を全文表示" }
       - name: body
         label: 本文
         type: rich-text

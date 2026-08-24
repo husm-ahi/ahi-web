@@ -1,0 +1,32 @@
+---
+import { withBase } from "../../utils/url";
+
+interface NewsItem {
+  data: { title: string; slug: string; date: Date };
+}
+
+interface Props {
+  items: NewsItem[];
+  moreHref: string;
+}
+
+const { items, moreHref } = Astro.props;
+
+const fmt = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+---
+
+<section class="block" id="news">
+  <div class="wrap">
+    <div class="sec-head"><h2>ニュース</h2></div>
+    <ul class="news">
+      {items.map((n) => (
+        <li>
+          <time datetime={n.data.date.toISOString()}>{fmt(n.data.date)}</time>
+          <a href={withBase(`/news/${n.data.slug}`)}>{n.data.title}</a>
+        </li>
+      ))}
+    </ul>
+    <a class="more" href={moreHref}>すべてのニュース →</a>
+  </div>
+</section>

@@ -1,0 +1,27 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+import { withBase } from "../../utils/url";
+
+interface Props {
+  entry: CollectionEntry<"pages">;
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<section class="block" id={entry.data.slug}>
+  <div class="wrap">
+    <div class="sec-head"><h2>{entry.data.title}</h2></div>
+    {entry.data.homeMode === "full" ? (
+      <div class="prose">
+        <Content />
+      </div>
+    ) : (
+      <>
+        {entry.data.description && <p class="sub" style="max-width:44em">{entry.data.description}</p>}
+        <a class="more" href={withBase(`/${entry.data.slug}`)}>{entry.data.title}を詳しく見る →</a>
+      </>
+    )}
+  </div>
+</section>

@@ -15,12 +15,17 @@ const desc =
   description ??
   "浜松医科大学 先端医療情報学講座の公式サイト。医用画像・臨床データ・医療情報基盤を対象とした研究と教育を行っています。";
 
-const navPages = (await getCollection("pages", (p) => p.data.nav)).sort(
-  (a, b) => a.data.order - b.data.order
-);
-const pageBySlug = new Map(navPages.map((p) => [p.data.slug, p]));
-const research = pageBySlug.get("research");
-const access = pageBySlug.get("access");
+const navPages = await getCollection("pages", (p) => p.data.nav);
+
+const navItems = [
+  { label: "ニュース", order: 5, href: withBase("/#news") },
+  { label: "メンバー", order: 50, href: withBase("/#members") },
+  ...navPages.map((p) => ({
+    label: p.data.title,
+    order: p.data.order,
+    href: withBase(p.data.home ? `/#${p.data.slug}` : `/${p.data.slug}`),
+  })),
+].sort((a, b) => a.order - b.order);
 ---
 
 <!doctype html>
@@ -44,14 +49,9 @@ const access = pageBySlug.get("access");
         <a class="brand" href={withBase("/")}><span class="mark"></span>先端医療情報学講座</a>
         <nav aria-label="メイン">
           <ul>
-            <li><a class="nav-link" href={withBase("/news")}>ニュース</a></li>
-            {research && (
-              <li><a class="nav-link" href={withBase(`/${research.data.slug}`)}>{research.data.title}</a></li>
-            )}
-            <li><a class="nav-link" href={withBase("/members")}>メンバー</a></li>
-            {access && (
-              <li><a class="nav-link" href={withBase(`/${access.data.slug}`)}>{access.data.title}</a></li>
-            )}
+            {navItems.map((item) => (
+              <li><a class="nav-link" href={item.href}>{item.label}</a></li>
+            ))}
           </ul>
         </nav>
       </div>
